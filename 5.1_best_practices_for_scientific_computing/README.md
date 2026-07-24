@@ -1,68 +1,71 @@
 # Session 5.1: Best Practices for Scientific Computing
 
-**SDSC Summer Institute 2026**
-
-**Thursday, August 6, 2026, 8:30-10:00 AM Pacific**
-
+**SDSC Summer Institute 2026**<br>
+**Thursday, August 6, 2026, 8:30-10:00 AM Pacific**<br>
 **Presented by Fernando Garzon**
 
 ## Session summary
 
-Research often begins in a Jupyter notebook, where ideas are easy to explore but
+Research often begins in a Jupyter notebook, where exploration is fast but
 execution order, hidden state, local files, and one-off environments can make a
-successful result difficult to reproduce. This session follows one notebook as
-it matures into a tested Python package, an automated build, a container, and a
-workflow that can run predictably on SDSC computing systems.
+successful result difficult to reproduce. This session follows that problem
+through modular Python packages, automated tests, GitHub Actions, and a
+versioned package that can be installed on Expanse.
 
-The session uses a 60/10/20 format:
+The session has three parts:
 
-- **60-minute talk:** notebook failure modes, packaging with nbdev, testing,
-  GitHub Actions, containers, and HPC execution.
+- **60-minute talk:** notebook failure modes, packages, testing, GitHub
+  Actions, and the practical ideas behind MLOps.
 - **10-minute Q&A:** questions about applying the workflow to research code.
-- **20-minute guided tutorial:** export a small skydiving model from a notebook,
-  run its tests, and execute it as a command-line program.
+- **20-minute guided tutorial:** create a clean, independently owned repository
+  from the skydiver seed project; test and build it; then follow the documented
+  PyPI-to-Expanse deployment path with a facilitator.
 
-By the end, attendees should understand that reproducibility is not only moving
-a notebook to another machine. It is making the code's inputs, execution order,
-dependencies, tests, and deployment path explicit.
+The tutorial deliberately does **not** use Docker, Singularity, Apptainer, or
+TSCC. Its deployment example is a Python package published to PyPI and
+installed on **Expanse**.
 
 ## Start here
 
-1. Read the [20-minute tutorial](tutorial/README.md).
-2. Read the [slide-by-slide script](SLIDE_SCRIPT.md) without needing PowerPoint.
-3. Open the [reference-edition PowerPoint](<slides/Architecting Reproducible Science - Summer Institute 2026 - Reference Edition.pptx>) or [PDF](<slides/Architecting Reproducible Science - Summer Institute 2026 - Reference Edition.pdf>).
-4. Review the longer [talk write-up](TALK_NOTES.md).
-5. Open the tutorial project in [`tutorial/skydiver`](tutorial/skydiver).
-6. Use [`tutorial/FACILITATOR.md`](tutorial/FACILITATOR.md) when helping a group.
-7. Browse the exact [`SummerInstitute-2025` snapshot](summer-institute-2025-snapshot).
-8. Use [`mnist_ae`](mnist_ae) as the larger packaged-model backup example.
+1. Read the [attendee tutorial](tutorial/README.md).
+2. Read the [facilitator guide](tutorial/FACILITATOR.md) before helping a group.
+3. Use the detailed [PyPI and Expanse workflow](resources/expanse-pypi-workflow.md)
+   for the deployment portion.
+4. Open the [PowerPoint](<slides/Architecting reproducible science Best Scientific Computing Practices.pptx>)
+   or [PDF](<slides/Architecting reproducible science Best Scientific Computing Practices.pdf>).
+5. Review the [presentation companion](SLIDE_SCRIPT.md) and [talk write-up](TALK_NOTES.md).
 
 ## Repository guide
 
 | Path | Purpose |
 | --- | --- |
-| `SLIDE_SCRIPT.md` | Slide-by-slide visible content, takeaway, and narrative purpose. |
-| `TALK_NOTES.md` | Reviewable write-up of the presentation's main argument and examples. |
-| `tutorial/README.md` | Attendee instructions for the 20-minute exercise. |
-| `tutorial/FACILITATOR.md` | Preflight checks, timing, expected results, and recovery steps. |
-| `tutorial/skydiver/nbs/` | The small exploratory notebook used during the exercise. |
-| `tutorial/skydiver/skydiver/` | Python package exported from the notebook, plus a CLI. |
-| `tutorial/skydiver/tests/` | Fast tests for scientific assumptions and package behavior. |
+| `SLIDE_SCRIPT.md` | Reviewable companion to the current 14-slide presentation. |
+| `TALK_NOTES.md` | Longer explanation of the presentation's scientific-software argument. |
+| `tutorial/README.md` | Attendee instructions and the 20-minute core path. |
+| `tutorial/FACILITATOR.md` | Preflight checks, timing, expected results, and recovery guidance. |
+| `tutorial/skydiver/` | The seed project students copy into a new personal repository. |
+| `resources/expanse-pypi-workflow.md` | PyPI publication and Expanse installation/job guidance. |
+| `resources/github-actions-test.yml` | CI template for a student repository after the project is copied to its root. |
 | `summer-institute-2025-snapshot/` | Exact snapshot of the external 2025 tutorial repository requested during review. |
-| `summer-institute-2025-snapshot/SOURCE.md` | Commit provenance and contents of that external-repository snapshot. |
-| `mnist_ae/` | Snapshot of the larger packaged MNIST backup demonstration. |
-| `mnist_ae/SOURCE.md` | Snapshot provenance and documented exclusions. |
-| `resources/` | Container and SDSC HPC examples referenced during the talk. |
+| `mnist_ae/` | Historical larger packaged-model backup example; it is not the 2026 tutorial path. |
 | `slides/` | Final PowerPoint and PDF presentation files. |
+
+## Student repository model
+
+Students should not fork this large Summer Institute repository. Instead, each
+student creates a **new, empty GitHub repository**, copies the contents of
+`tutorial/skydiver/` into it, and pushes the first commit. That repository is
+their own sandbox for GitHub Actions and later releases. The detailed steps,
+including `.gitignore`, `.env.example`, and secret handling, are in the
+[attendee tutorial](tutorial/README.md).
 
 ## What is intentionally not included
 
-Local virtual environments, `.env` files, notebook checkpoints, build outputs,
-and raw downloaded MNIST files are excluded. The tutorial does not require a
-GPU, Docker, Apptainer, or access to an SDSC system.
+Local virtual environments, real `.env` files, PyPI tokens, notebook
+checkpoints, build outputs, and raw downloaded MNIST files are excluded. A
+template may show variable *names*, but no secret belongs in Git, a notebook,
+an issue, a slide, or an Expanse job script.
 
-## Further study
-
-The tutorial demonstrates one short path through the workflow. The MNIST
-snapshot shows the larger version: notebooks, an exported package, unit tests,
-packaging metadata, release automation, and model-training code.
+The Docker, Singularity, Apptainer, and TSCC material retained under
+`resources/` is historical reference only. It is not part of this session's
+tutorial or live example.

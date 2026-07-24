@@ -1,18 +1,18 @@
 # Architecting Reproducible Science
 
-These notes accompany the presentation and preserve the argument behind the
-visual slides. They are not a word-for-word script. The PowerPoint contains
-more detailed presenter notes, including the full Milena video transcript and
-live-demo cues.
+These notes accompany the current presentation. They preserve the argument
+behind the visual slides; they are not a word-for-word script.
 
 ## Session shape
 
 - 60 minutes: presentation and short demonstrations
 - 10 minutes: audience questions
-- 20 minutes: self-paced tutorial with a facilitator
+- 20 minutes: hands-on work, with a facilitator
 
-The tutorial begins after the Q&A. It is designed to be read by attendees while
-another instructor helps the room.
+The hands-on portion uses a student-owned repository and the skydiver package.
+It does not use TSCC, Docker, Singularity, or Apptainer. The deployment
+extension is PyPI publication followed by installation and a small SLURM job on
+Expanse.
 
 ## 1. The reproducibility horror
 
@@ -22,97 +22,84 @@ controls memory use, and freezes the notebook. Her mathematics did not suddenly
 become wrong. The workflow depended on hidden state and an execution history
 that existed only in her head.
 
-The story introduces the session's central question:
+The central question is:
 
-> Can another person produce the same result, from a clean environment, without
+> Can another person produce the same result from a clean environment without
 > reconstructing the author's memory?
 
-## 2. Notebooks and packages
+## 2. Notebooks and modular packages
 
-Notebooks are excellent laboratories. They make exploration, visualization, and
-iteration fast. Their weakness is not that they are notebooks; it is that
-important behavior can remain implicit:
+Notebooks are excellent laboratories: exploration, plots, and quick iteration
+are their strength. The risk is implicit behavior. A package makes reusable
+behavior explicit through function arguments, stable import paths, installable
+dependencies, tests, and a command-line entry point.
 
-- cells can run in a different order than they appear;
-- imports, paths, and data may exist only on one machine;
-- long-running work can happen during import;
-- scientific assumptions may be written in prose but never checked;
-- collaborators may not know which cells form the reusable model.
+The point is not that notebooks are bad. The point is that research code needs a
+clear boundary between exploratory state and reusable software.
 
-A package makes the reusable contract explicit. Inputs become function
-arguments, reusable code gains stable import paths, heavy execution moves behind
-an entry point, and dependencies become installable metadata.
+## 3. Let us productionize the example
 
-## 3. Notebook to package
+The historical MNIST example illustrates the larger notebook-to-package path.
+The hands-on example is deliberately smaller: a skydiving model exported from
+nbdev, tested as a package, and run through a CLI.
 
-The live example uses nbdev to keep the notebook useful while exporting selected
-cells into a Python module. The workflow is intentionally small:
+The transferable engineering ideas are small modules, one responsibility per
+function, private implementation helpers where appropriate, no expensive work
+at import time, clear documentation, and an explicit `main()` entry point.
+AI assistance can accelerate refactoring, but it does not replace a testable
+specification or a human review of the scientific assumptions.
+
+## 4. GitHub Actions
+
+The first automation should be tests and a build. GitHub Actions gives a
+student-owned repository a clean checkout that repeats the local rule:
 
 ```bash
-python -m venv .venv
-python -m pip install -e ".[dev]"
 nbdev-export
-pytest
-skydiver --mass 80 --drag 0.26
+git diff --exit-code
+pytest -q
+python -m build
 ```
 
-The skydiver example turns a one-dimensional drag equation into a package and a
-command-line interface. The important move is not the particular tool. It is
-separating exploration from the public, testable behavior other programs can
-call.
+The `git diff` check matters for notebook-derived packages: it detects an
+exported notebook change that has not been committed as generated Python code.
 
-This material uses nbdev 3 syntax and `pyproject.toml` configuration. Older
-nbdev projects may need `nbdev-migrate-config` before using the current
-commands.
+The Summer Institute repository is a shared teaching artifact, so students copy
+the seed project to a new repository rather than fork the full course
+repository. Their repository is the place to own Actions, branches, releases,
+and experiments.
 
-## 4. Tests and GitHub Actions
+## 5. Package release and Expanse
 
-Tests should protect scientific meaning, not merely execute lines of code. The
-tutorial checks that:
+The package is built once, given a unique public name and immutable version, and
+published to PyPI. Expanse installs that exact version into a virtual environment
+and runs the package's same CLI under SLURM.
 
-- invalid physical parameters are rejected;
-- terminal velocity is positive and matches a known calculation;
-- increasing mass increases terminal velocity;
-- increasing drag lowers terminal velocity;
-- the time to approach terminal velocity is finite and positive.
+```text
+notebook -> package -> tests -> wheel -> PyPI -> Expanse virtual environment -> SLURM job
+```
 
-GitHub Actions then runs those tests from a clean checkout. This turns a local
-claim into a repeatable project rule: changes must reinstall successfully and
-preserve the scientific contract before a wheel or container is released.
+This is intentionally a Python-package deployment example, not a container
+lesson. A PyPI API token is only for local publication; it never belongs in Git,
+GitHub Actions logs, or Expanse. For later automated releases, PyPI Trusted
+Publishing is preferable to a long-lived stored token.
 
-## 5. One artifact, many deployments
-
-The package is built once and carried forward:
-
-1. Export the reusable code.
-2. Test the contract.
-3. Build a wheel.
-4. Install the wheel in a container.
-5. Run the same entry point locally, in CI, or under a scheduler.
-
-A container improves portability by recording the runtime environment. It does
-not prove the model is correct, and it does not make a workflow scalable by
-itself. Tests, versioned inputs, resource requests, and measured performance are
-still required.
-
-On SDSC systems, the scheduler owns compute resources. Submit work with an
-appropriate allocation, partition, QOS, time limit, memory request, and GPU
-request. Use `singularity exec --nv` only when the application actually needs
-an allocated NVIDIA GPU. The examples in [`resources`](resources) are templates;
-account names and available modules must be checked on the target system.
+The skydiver CLI is CPU-only. Expanse is still useful in the example because it
+makes the deployment boundary concrete: a clean environment can install an
+identified artifact and run it through the scheduler. Real models should request
+only the CPU, memory, time, and GPU resources they actually need.
 
 ## 6. Takeaways
 
 The model did not need to change. The workflow did.
 
-- Make execution order explicit.
-- Turn assumptions into tests.
-- Keep data paths and expensive work out of module import.
-- Record dependencies and build installable artifacts.
-- Build once, then run the same entry point everywhere.
-- Treat notebooks as valuable interfaces to exploration, not as the only record
-  of the software system.
+- Make execution order and inputs explicit.
+- Turn scientific assumptions into tests.
+- Keep reusable code modular and importable.
+- Let CI repeat the clean-room test and build.
+- Publish versioned artifacts rather than copying an untracked working folder.
+- Keep secrets out of source control and separate publication credentials from
+  HPC access.
 
-Continue with the [20-minute tutorial](tutorial/README.md). The complete
-[`mnist_ae`](mnist_ae) snapshot is available as a larger reference implementation
-after the session.
+Continue with the [attendee tutorial](tutorial/README.md) and its
+[facilitator guide](tutorial/FACILITATOR.md).

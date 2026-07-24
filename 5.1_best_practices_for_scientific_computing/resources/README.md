@@ -1,30 +1,24 @@
-# Deployment and HPC reference
+# Deployment reference
 
-These files support the presentation but are not part of the 20-minute
-hands-on exercise.
+The 2026 tutorial deployment path is:
+
+```text
+student-owned GitHub repository -> tests and wheel -> PyPI -> Expanse virtual environment -> SLURM job
+```
+
+Start with [PyPI and Expanse workflow](expanse-pypi-workflow.md). It explains
+unique package names, versions, `.env` and token safety, TestPyPI versus PyPI,
+and the CPU-only Expanse job used for skydiver.
 
 | File | Purpose |
 | --- | --- |
-| `Dockerfile` | Build the tutorial package into a small OCI container. |
-| `container-workflow.md` | Move from a Python package to Docker and then Singularity/Apptainer. |
-| `github-actions-test.yml` | Example test-and-build workflow for a standalone repository. |
-| `expanse-gpu.slurm` | One-GPU Expanse job template. |
-| `tscc-gpu.slurm` | One-GPU TSCC Hotel job template. |
+| `expanse-pypi-workflow.md` | Current tutorial deployment guide. |
+| `github-actions-test.yml` | Test-and-build template from the older nested course layout; adapt it as described in `tutorial/README.md`. |
+| `expanse-gpu.slurm` | Historical GPU/container reference. Not used in the skydiver tutorial. |
+| `tscc-gpu.slurm` | Historical TSCC reference. Not used in this session. |
+| `Dockerfile` | Historical container reference. Not used in this session. |
+| `container-workflow.md` | Historical note explaining why containers are outside the 2026 tutorial. |
 
-The SLURM files are templates. Replace `CHANGE_ME` with an allocation you are
-authorized to use, check the current partitions with `sinfo`, and inspect
-available container modules with `module spider singularity` or
-`module spider apptainer`.
-
-## Current SDSC references
-
-These templates were checked in July 2026 against:
-
-- [Expanse User Guide](https://www.sdsc.edu/systems/expanse/user_guide.html)
-- [TSCC User Guide](https://www.sdsc.edu/systems/tscc/user_guide.html)
-- [SDSC Python and Singularity training](https://hpc-training.sdsc.edu/hpc-training-docs/sdsc-summer-institute-2025/6.1_python_for_HPC/python_singularity/)
-
-Expanse requires a valid project account and supports `gpu` and `gpu-shared`
-partitions. TSCC requires both a partition and QOS; the Hotel GPU example uses
-`hotel-gpu`. Scheduler policies and module names can change, so the user guides
-remain the source of truth.
+Expanse details, partitions, module names, and allocation policies can change.
+Use the [Expanse User Guide](https://www.sdsc.edu/systems/expanse/user_guide.html)
+as the operational source of truth.
