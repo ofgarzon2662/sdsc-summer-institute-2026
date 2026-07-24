@@ -65,7 +65,3 @@ Local virtual environments, real `.env` files, PyPI tokens, notebook
 checkpoints, build outputs, and raw downloaded MNIST files are excluded. A
 template may show variable *names*, but no secret belongs in Git, a notebook,
 an issue, a slide, or an Expanse job script.
-
-The Docker, Singularity, Apptainer, and TSCC material retained under
-`resources/` is historical reference only. It is not part of this session's
-tutorial or live example.
