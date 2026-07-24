@@ -29,16 +29,19 @@ dependencies, tests, and deployment path explicit.
 ## Start here
 
 1. Read the [20-minute tutorial](tutorial/README.md).
-2. Review the [talk write-up](TALK_NOTES.md) without needing PowerPoint.
-3. Open the tutorial project in [`tutorial/skydiver`](tutorial/skydiver).
-4. Use [`tutorial/FACILITATOR.md`](tutorial/FACILITATOR.md) when helping a group.
-5. Browse the exact [`SummerInstitute-2025` snapshot](summer-institute-2025-snapshot).
-6. Use [`mnist_ae`](mnist_ae) as the larger packaged-model backup example.
+2. Read the [slide-by-slide script](SLIDE_SCRIPT.md) without needing PowerPoint.
+3. Open the [reference-edition PowerPoint](<slides/Architecting Reproducible Science - Summer Institute 2026 - Reference Edition.pptx>) or [PDF](<slides/Architecting Reproducible Science - Summer Institute 2026 - Reference Edition.pdf>).
+4. Review the longer [talk write-up](TALK_NOTES.md).
+5. Open the tutorial project in [`tutorial/skydiver`](tutorial/skydiver).
+6. Use [`tutorial/FACILITATOR.md`](tutorial/FACILITATOR.md) when helping a group.
+7. Browse the exact [`SummerInstitute-2025` snapshot](summer-institute-2025-snapshot).
+8. Use [`mnist_ae`](mnist_ae) as the larger packaged-model backup example.
 
 ## Repository guide
 
 | Path | Purpose |
 | --- | --- |
+| `SLIDE_SCRIPT.md` | Slide-by-slide visible content, takeaway, and narrative purpose. |
 | `TALK_NOTES.md` | Reviewable write-up of the presentation's main argument and examples. |
 | `tutorial/README.md` | Attendee instructions for the 20-minute exercise. |
 | `tutorial/FACILITATOR.md` | Preflight checks, timing, expected results, and recovery steps. |
