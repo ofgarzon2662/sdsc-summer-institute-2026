@@ -33,20 +33,16 @@ installed on **Expanse**.
    for the deployment portion.
 4. Open the [PowerPoint](<slides/Architecting reproducible science Best Scientific Computing Practices.pptx>)
    or [PDF](<slides/Architecting reproducible science Best Scientific Computing Practices.pdf>).
-5. Review the [presentation companion](SLIDE_SCRIPT.md) and [talk write-up](TALK_NOTES.md).
 
 ## Repository guide
 
 | Path | Purpose |
 | --- | --- |
-| `SLIDE_SCRIPT.md` | Reviewable companion to the current 14-slide presentation. |
-| `TALK_NOTES.md` | Longer explanation of the presentation's scientific-software argument. |
 | `tutorial/README.md` | Attendee instructions and the 20-minute core path. |
 | `tutorial/FACILITATOR.md` | Preflight checks, timing, expected results, and recovery guidance. |
 | `tutorial/skydiver/` | The seed project students copy into a new personal repository. |
 | `resources/expanse-pypi-workflow.md` | PyPI publication and Expanse installation/job guidance. |
 | `resources/github-actions-test.yml` | CI template for a student repository after the project is copied to its root. |
-| `summer-institute-2025-snapshot/` | Exact snapshot of the external 2025 tutorial repository requested during review. |
 | `mnist_ae/` | Historical larger packaged-model backup example; it is not the 2026 tutorial path. |
 | `slides/` | Final PowerPoint and PDF presentation files. |
 
